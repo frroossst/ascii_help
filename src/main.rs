@@ -1,3 +1,4 @@
+use radix_fmt::radix;
 use clap::Parser;
 
 
@@ -18,16 +19,59 @@ fn main()
     {
     let args = Args::parse();
 
-    let ascii_10 = args.alphabet.as_bytes()[0];
+    let mut ascii_10 = 0;
+    if args.alphabet != "" 
+        {
+        ascii_10 = args.alphabet.as_bytes()[0];
+        }
 
+    let base: u8;
     match args.base
         {
-        Some(base) => println!("{}", convert_to_base(ascii_10 as u32, base as u32)),
-        None => { println!("{}", ascii_10) },
+        Some(b) => 
+            {
+            base = b;
+            }
+        None =>
+            {  
+            base = 10;
+            }
+        }
+
+    match args.alphabet.as_str()
+        {
+        "" => 
+            {
+            match args.number
+                {
+                Some(_) => 
+                    {
+                    }
+                None => 
+                    {
+                    println!("{}", 0);
+                    }
+                }
+            }
+        _ => 
+            {
+            println!("{}", convert_to_num_wrt_base(ascii_10 as u32, base as u32));
+            }
+        }
+
+    match args.number
+        {
+        Some(n) => 
+            {
+            println!("{}", convert_num_to_char(convert_base_from_x_to_y(base, 10, n)));
+            }
+        None => 
+            {
+            }
         }
     }
 
-fn convert_to_base(num: u32, to_base: u32) -> String
+fn convert_to_num_wrt_base(num: u32, to_base: u32) -> String
     {
     let mut result = String::new();
     let mut n = num;
@@ -39,8 +83,15 @@ fn convert_to_base(num: u32, to_base: u32) -> String
     result.chars().rev().collect::<String>()
     }
 
-fn convert_to_char(num: u32) -> String
+fn convert_num_to_char(num: u8) -> String
     {
-    let c = char::from_digit(num, 10).unwrap();
-    c.to_string()
+    let byte_arr = [num];
+    String::from_utf8_lossy(&byte_arr).to_string()
+    }
+
+fn convert_base_from_x_to_y(x: u8, y: u8, num: u8) -> u8
+    {
+    // TODO: convert a given number num in base x to base y
+    // return the new number
+    0
     }
