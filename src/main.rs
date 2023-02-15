@@ -1,4 +1,3 @@
-use radix_fmt::radix;
 use clap::Parser;
 
 
@@ -89,9 +88,28 @@ fn convert_num_to_char(num: u8) -> String
     String::from_utf8_lossy(&byte_arr).to_string()
     }
 
-fn convert_base_from_x_to_y(x: u8, y: u8, num: u8) -> u8
+fn convert_base_from_x_to_y(before_base: u8, _after_base: u8, num: u8) -> u8
     {
     // TODO: convert a given number num in base x to base y
     // return the new number
-    0
+    match before_base
+        {
+        16 =>
+            {
+            let num_str = num.to_string();
+            u64::from_str_radix(&String::from(num_str), 16).unwrap() as u8
+            }
+        10 => 
+            {
+            num
+            }
+        8 => 
+            {
+            u64::from_str_radix(&String::from(num.to_string()), 8).unwrap() as u8
+            }
+        _ => 
+            {
+            panic!("Base not supported {}", before_base);
+            }
+        }
     }
