@@ -1,115 +1,51 @@
-use clap::Parser;
+#[inline]
+fn print_help_message() {
+    eprintln!("Usage: ");
+    eprintln!("\tascii_help <string>       convert the string to ASCII values");
+    eprintln!("\tascii_help [numbers...]   convert the numbers to ASCII characters");
+    eprintln!("\tascii_help -h             prints this message");
+}
 
+fn main() {
+    let mut args = std::env::args();
+    let _program = args.next().unwrap();
 
-#[derive(Parser, Debug)]
-struct Args
-    {
-    #[clap(value_parser, default_value = "")]
-    alphabet: String,
+    let mut str_arg = match args.next() {
+        Some(s) => { 
+            // say <NON-ASCII> if any of the characters are not ASCII
+            let is_ascii = s.chars().all(|c| c.is_ascii());
+            if is_ascii {
+                s
+            } else {
+                eprintln!("<NON-ASCII>");
+                std::process::exit(1);
+            }
+        },
+        None => {
+            print_help_message();
+            std::process::exit(1);
+        },
+    };
 
-    #[clap(value_parser, short, long)]
-    base: Option<u8>,
+    // since the input may be space seperated collect all the arguments
+    let rem_str_args = args.collect::<Vec<String>>();
+    str_arg = str_arg + " " + &rem_str_args.join(" ");
 
-    #[clap(value_parser, short, long)]
-    number: Option<u8>,
+    // if the input is of form "[num0, num1, num2, ...]" then convert it to ASCII characters
+    if str_arg.starts_with('[') && str_arg.ends_with(']') {
+        let mut ascii_chars = Vec::new();
+        let numbers = str_arg[1..str_arg.len()-1].split(", ");
+        for num in numbers {
+            let num = num.parse::<u8>().unwrap();
+            let c = num as char;
+            ascii_chars.push(c);
+        }
+        let ascii_str: String = ascii_chars.into_iter().collect();
+        println!("{}", ascii_str);
+    } else { // else convert the string to ASCII values
+        let ascii_values: Vec<u8> = str_arg.chars().map(|c| c as u8).collect();
+        println!("{:?}", ascii_values);
     }
 
-fn main() 
-    {
-    let args = Args::parse();
+}
 
-    let mut ascii_10 = 0;
-    if args.alphabet != "" 
-        {
-        ascii_10 = args.alphabet.as_bytes()[0];
-        }
-
-    let base: u8;
-    match args.base
-        {
-        Some(b) => 
-            {
-            base = b;
-            }
-        None =>
-            {  
-            base = 10;
-            }
-        }
-
-    match args.alphabet.as_str()
-        {
-        "" => 
-            {
-            match args.number
-                {
-                Some(_) => 
-                    {
-                    }
-                None => 
-                    {
-                    println!("{}", 0);
-                    }
-                }
-            }
-        _ => 
-            {
-            println!("{}", convert_to_num_wrt_base(ascii_10 as u32, base as u32));
-            }
-        }
-
-    match args.number
-        {
-        Some(n) => 
-            {
-            println!("{}", convert_num_to_char(convert_base_from_x_to_y(base, 10, n)));
-            }
-        None => 
-            {
-            }
-        }
-    }
-
-fn convert_to_num_wrt_base(num: u32, to_base: u32) -> String
-    {
-    let mut result = String::new();
-    let mut n = num;
-    while n > 0 
-        {
-        result.push_str(&((n % to_base) as u8).to_string());
-        n /= to_base;
-        }
-    result.chars().rev().collect::<String>()
-    }
-
-fn convert_num_to_char(num: u8) -> String
-    {
-    let byte_arr = [num];
-    String::from_utf8_lossy(&byte_arr).to_string()
-    }
-
-fn convert_base_from_x_to_y(before_base: u8, _after_base: u8, num: u8) -> u8
-    {
-    // TODO: convert a given number num in base x to base y
-    // return the new number
-    match before_base
-        {
-        16 =>
-            {
-            let num_str = num.to_string();
-            u64::from_str_radix(&String::from(num_str), 16).unwrap() as u8
-            }
-        10 => 
-            {
-            num
-            }
-        8 => 
-            {
-            u64::from_str_radix(&String::from(num.to_string()), 8).unwrap() as u8
-            }
-        _ => 
-            {
-            panic!("Base not supported {}", before_base);
-            }
-        }
-    }
