@@ -42,9 +42,9 @@ fn parse_input_to_array(input: &str) -> Vec<u8> {
     }
 
     // else split the string by commas and parse each number
-    let numbers = input[1..input.len()-1].split(", ");
+    let numbers = input[1..input.len()-1].split(",");
     for num in numbers {
-        let num = num.parse::<u8>().unwrap();
+        let num = num.trim().parse::<u8>().unwrap();
         num_arr.push(num);
     }
     num_arr
