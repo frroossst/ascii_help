@@ -75,22 +75,16 @@ fn main() {
     let rem_str_args = args.collect::<Vec<String>>();
     str_arg = str_arg + " " + &rem_str_args.join(" ");
 
-    dbg!(&str_arg);
-
     let stripped = str_arg.trim();
 
     // if the input is of form "[num0, num1, num2, ...]" then convert it to ASCII characters
     if str_arg.starts_with('[') && stripped.ends_with(']') {
-        dbg!("array path");
-
-        let mut ascii_chars = parse_input_to_array(&str_arg);
-        dbg!(&ascii_chars);
+        let ascii_chars = parse_input_to_array(&str_arg);
 
         let ascii_str: String = ascii_chars.iter().map(|&c| byte_to_ascii(c)).collect();
         println!("{}", ascii_str);
 
     } else { // else convert the string to ASCII values
-        dbg!("string path");
         let ascii_values: Vec<u8> = str_arg.chars().map(|c| c as u8).collect();
         println!("{:?}", ascii_values);
     }
