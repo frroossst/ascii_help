@@ -30,14 +30,24 @@ fn byte_to_ascii(byte: u8) -> String {
 }
 
 fn parse_input_to_array(input: &str) -> Vec<u8> {
-    let num_arr = Vec::new();
+    let mut num_arr = Vec::new();
 
-    for c in input.chars() {
-        if c.is_digit(10) {
-            let num = c.to_digit(10).unwrap() as u8;
-            num_arr.push(num);
-        }
+    let input = input.trim();
+
+    // if there are no commas then return the singular number
+    if !input.contains(",") {
+        let num = input[1..input.len()-1].parse::<u8>().unwrap();
+        num_arr.push(num);
+        return num_arr;
     }
+
+    // else split the string by commas and parse each number
+    let numbers = input[1..input.len()-1].split(", ");
+    for num in numbers {
+        let num = num.parse::<u8>().unwrap();
+        num_arr.push(num);
+    }
+    num_arr
 }
 
 fn main() {
@@ -67,24 +77,20 @@ fn main() {
 
     dbg!(&str_arg);
 
+    let stripped = str_arg.trim();
+
     // if the input is of form "[num0, num1, num2, ...]" then convert it to ASCII characters
-    if str_arg.starts_with('[') && str_arg.ends_with(']') {
+    if str_arg.starts_with('[') && stripped.ends_with(']') {
         dbg!("array path");
 
         let mut ascii_chars = parse_input_to_array(&str_arg);
-
-        let mut ascii_chars = Vec::new();
-        let numbers = str_arg[1..str_arg.len()-1].split(", ");
-        for num in numbers {
-            dbg!(&num);
-            let num = num.parse::<u8>().unwrap();
-            ascii_chars.push(num);
-        }
+        dbg!(&ascii_chars);
 
         let ascii_str: String = ascii_chars.iter().map(|&c| byte_to_ascii(c)).collect();
         println!("{}", ascii_str);
 
     } else { // else convert the string to ASCII values
+        dbg!("string path");
         let ascii_values: Vec<u8> = str_arg.chars().map(|c| c as u8).collect();
         println!("{:?}", ascii_values);
     }
