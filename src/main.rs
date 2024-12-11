@@ -51,30 +51,18 @@ fn parse_input_to_array(input: &str) -> Vec<u8> {
 }
 
 fn main() {
-    let mut args = std::env::args();
-    let _program = args.next().unwrap();
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() == 1 {
+        print_help_message();
+        std::process::exit(1);
+    }
 
-    let mut str_arg = match args.next() {
-        Some(s) => { 
-            // say <NON-ASCII> if any of the characters are not ASCII
-            let is_ascii = s.chars().all(|c| c.is_ascii());
-            if is_ascii {
-                s
-            } else {
-                eprintln!("<NON-ASCII>");
-                std::process::exit(1);
-            }
-        },
-        None => {
-            print_help_message();
-            std::process::exit(1);
-        },
-    };
+    if args.len() == 2 && (args[1] == "-h" || args[1] == "--help") {
+        print_help_message();
+        std::process::exit(0);
+    }
 
-    // since the input may be space seperated collect all the arguments
-    let rem_str_args = args.collect::<Vec<String>>();
-    str_arg = str_arg + " " + &rem_str_args.join(" ");
-
+    let str_arg = &args[1..].join(" ");
     let stripped = str_arg.trim();
 
     // if the input is of form "[num0, num1, num2, ...]" then convert it to ASCII characters

@@ -1,0 +1,9 @@
+- handle inputs like \0 or ACK or NAK
+
+- add cli options to
+  - overlay the output with the input so it looks like:
+    [h,   e,   l,   l,   o]
+    [104, 101, 108, 108, 111, 32]
+  - specify the input and output bases
+
+  
