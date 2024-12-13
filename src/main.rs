@@ -62,8 +62,16 @@ fn parse_input_to_array(input: &str) -> Vec<u8> {
 
     // if there are no commas then return the singular number
     if !input.contains(",") {
-        let num = input[1..input.len()-1].parse::<u8>().unwrap();
-        num_arr.push(num);
+        let num = input[1..input.len()-1].parse::<u8>();
+        match num {
+            Ok(num) => {
+                num_arr.push(num);
+            },
+            Err(_) => {
+                eprintln!("Expected number to be in range 0..255, got '{}'", input);
+                std::process::exit(1);
+            }
+        }
         return num_arr;
     }
 
