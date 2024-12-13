@@ -21,7 +21,7 @@ fn from_any_base_to_decimal(num: &str, base: Option<u32>) -> u32 {
     }
 
     if base.is_some() {
-        pbase = Some(base.unwrap());
+        pbase = Some(base.expect("shouldnt crash unless the language is broken!"));
     }
 
     u32::from_str_radix(num, pbase.unwrap()).unwrap()
