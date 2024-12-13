@@ -6,6 +6,27 @@ fn print_help_message() {
     eprintln!("\tascii_help -h             prints this message");
 }
 
+fn from_any_base_to_decimal(num: &str, base: Option<u32>) -> u32 {
+    let mut pbase: Option<u32> = None;
+    let mut num = num;
+    if num.starts_with("0x") {
+        num = &num[2..];
+        pbase = Some(16);
+    } else if num.starts_with("0b") {
+        num = &num[2..];
+        pbase = Some(2);
+    } else if num.starts_with("0o") {
+        num = &num[2..];
+        pbase = Some(8);
+    }
+
+    if base.is_some() {
+        pbase = Some(base.unwrap());
+    }
+
+    u32::from_str_radix(num, pbase.unwrap()).unwrap()
+}
+
 fn byte_to_ascii(byte: u8) -> String {
     // 0..=32 + 127
     let special_number = [
@@ -29,6 +50,7 @@ fn byte_to_ascii(byte: u8) -> String {
     c.to_string()
 }
 
+#[inline]
 fn parse_input_to_array(input: &str) -> Vec<u8> {
     let mut num_arr = Vec::new();
 
