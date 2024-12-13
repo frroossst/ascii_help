@@ -78,8 +78,16 @@ fn parse_input_to_array(input: &str) -> Vec<u8> {
     // else split the string by commas and parse each number
     let numbers = input[1..input.len()-1].split(",");
     for num in numbers {
-        let num = num.trim().parse::<u8>().unwrap();
-        num_arr.push(num);
+        let numr = num.trim().parse::<u8>();
+        match numr {
+            Ok(n) => {
+                num_arr.push(n);
+            },
+            Err(_) => {
+                eprintln!("Expected number to be in range 0..255, got '{}'", num);
+                std::process::exit(1);
+            }
+        }
     }
     num_arr
 }
