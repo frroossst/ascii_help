@@ -30,18 +30,22 @@ fn from_any_base_to_decimal(num: &str, base: Option<u32>) -> u32 {
 fn byte_to_ascii(byte: u8) -> String {
     // 0..=32 + 127
     let special_number = [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 
-        22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 127
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+        19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 127
     ];
 
     let special_repr = [
-        "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", "BS", "HT", "LF", "VT",
-        "FF", "CR", "SO", "SI", "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
-        "CAN", "EM", "SUB", "ESC", "FS", "GS", "RS", "US", "SPACE", "DEL"
+        "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", "BS", "HT", 
+        "LF", "VT", "FF", "CR", "SO", "SI", "DLE", "DC1", "DC2", "DC3", 
+        "DC4", "NAK", "SYN", "ETB", "CAN", "EM", "SUB", "ESC", "FS", "GS", 
+        "RS", "US", "SPACE", "DEL"
     ];
 
     if byte <= 32 || byte == 127 {
-        let idx = special_number.iter().position(|&x| x == byte).unwrap();
+        let idx = special_number.iter()
+            .position(|&x| x == byte)
+            .unwrap();
+
         let special_repr = "<".to_string() + special_repr[idx] + ">";
         return special_repr.to_string();
     }
@@ -87,15 +91,20 @@ fn main() {
     let str_arg = &args[1..].join(" ");
     let stripped = str_arg.trim();
 
-    // if the input is of form "[num0, num1, num2, ...]" then convert it to ASCII characters
+    // if the input is of form "[num0, num1, num2, ...]" 
+    // then convert it to ASCII characters
     if str_arg.starts_with('[') && stripped.ends_with(']') {
         let ascii_chars = parse_input_to_array(&str_arg);
 
-        let ascii_str: String = ascii_chars.iter().map(|&c| byte_to_ascii(c)).collect();
+        let ascii_str: String = ascii_chars.iter()
+            .map(|&c| byte_to_ascii(c))
+            .collect();
         println!("{}", ascii_str);
 
     } else { // else convert the string to ASCII values
-        let ascii_values: Vec<u8> = str_arg.chars().map(|c| c as u8).collect();
+        let ascii_values: Vec<u8> = str_arg.chars()
+            .map(|c| c as u8)
+            .collect();
         println!("{:?}", ascii_values);
     }
 
