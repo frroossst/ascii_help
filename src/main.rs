@@ -102,6 +102,9 @@ fn main() {
     if args.len() == 2 && (args[1] == "-h" || args[1] == "--help") {
         print_help_message();
         std::process::exit(0);
+    } else if args.len() == 2 && (args[1] == "-v" || args[1] == "--version") {
+        println!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
+        std::process::exit(0);
     }
 
     let str_arg = &args[1..].join(" ");

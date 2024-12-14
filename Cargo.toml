@@ -1,7 +1,7 @@
 cargo-features = ["codegen-backend"]
 [package]
 name = "ascii_help"
-version = "1.2.0"
+version = "1.2.1"
 edition = "2021"
 description = "A simple tool to help you quickly convert ASCII codes"
 license = "MIT"
