@@ -105,15 +105,15 @@ fn main() {
         args = input.trim().split_whitespace().map(|s| s.to_string()).collect();
     }
 
-    if args.len() == 1 {
+    if args.len() == 0 {
         print_help_message();
         std::process::exit(1);
     }
 
-    if args.len() == 2 && (args[1] == "-h" || args[1] == "--help") {
+    if args.len() == 1 && (args[0] == "-h" || args[0] == "--help") {
         print_help_message();
         std::process::exit(0);
-    } else if args.len() == 2 && (args[1] == "-v" || args[1] == "--version") {
+    } else if args.len() == 1 && (args[0] == "-v" || args[0] == "--version") {
         println!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
         std::process::exit(0);
         }
