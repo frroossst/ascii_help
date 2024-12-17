@@ -93,7 +93,18 @@ fn parse_input_to_array(input: &str) -> Vec<u8> {
 }
 
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
+    
+    let is_tty = atty::is(atty::Stream::Stdin);
+
+    let args: Vec<String>;
+    if is_tty {
+        args = std::env::args().skip(1).collect();
+    } else {
+        let mut input = String::new();
+        std::io::stdin().read_line(&mut input).expect("unable to read from stdin");
+        args = input.trim().split_whitespace().map(|s| s.to_string()).collect();
+    }
+
     if args.len() == 1 {
         print_help_message();
         std::process::exit(1);
@@ -105,7 +116,7 @@ fn main() {
     } else if args.len() == 2 && (args[1] == "-v" || args[1] == "--version") {
         println!("{} v{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
         std::process::exit(0);
-    }
+        }
 
     /*
     let input = if !atty::is(atty::Stream::Stdin) {
