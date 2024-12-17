@@ -118,16 +118,7 @@ fn main() {
         std::process::exit(0);
         }
 
-    /*
-    let input = if !atty::is(atty::Stream::Stdin) {
-        let mut input = String::new();
-        std::io::stdin().read_line(&mut input).expect("unable to read from stdin");
-        input.trim().to_string();
-        input
-    }; 
-    */
-
-    let str_arg = &args[1..].join(" ");
+    let str_arg = &args.join(" ");
     let stripped = str_arg.trim();
 
     // if the input is of form "[num0, num1, num2, ...]" 
